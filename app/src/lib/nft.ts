@@ -14,6 +14,8 @@ export async function fetchOwnedNFTs(
   owner: PublicKey
 ): Promise<OwnedNFT[]> {
   try {
+    console.log('Fetching NFTs for wallet:', owner.toString());
+    
     // Get all token accounts owned by the wallet
     const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
       owner,
@@ -21,6 +23,8 @@ export async function fetchOwnedNFTs(
         programId: TOKEN_PROGRAM_ID,
       }
     );
+
+    console.log(`Found ${tokenAccounts.value.length} token accounts`);
 
     // Filter for NFTs (amount = 1, decimals = 0)
     const nfts: OwnedNFT[] = [];
@@ -30,6 +34,8 @@ export async function fetchOwnedNFTs(
       const mint = new PublicKey(parsedInfo.mint);
       const amount = parsedInfo.tokenAmount.uiAmount;
       const decimals = parsedInfo.tokenAmount.decimals;
+
+      console.log(`Token: ${mint.toString()}, amount: ${amount}, decimals: ${decimals}`);
 
       // NFT criteria: amount = 1 and decimals = 0
       if (amount === 1 && decimals === 0) {
@@ -41,6 +47,7 @@ export async function fetchOwnedNFTs(
       }
     }
 
+    console.log(`Found ${nfts.length} NFTs`);
     return nfts;
   } catch (error) {
     console.error('Error fetching NFTs:', error);

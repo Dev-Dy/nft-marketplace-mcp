@@ -48,6 +48,20 @@ sleep 3
 # Start frontend
 echo "🌐 Starting frontend..."
 cd app
+
+# Create .env.local if it doesn't exist
+if [ ! -f .env.local ]; then
+    echo "   Creating .env.local..."
+    echo "VITE_SOLANA_RPC_URL=https://api.devnet.solana.com" > .env.local
+    echo "VITE_MCP_API_URL=http://localhost:8080" >> .env.local
+fi
+
+# Install dependencies if node_modules doesn't exist
+if [ ! -d node_modules ]; then
+    echo "   Installing dependencies..."
+    npm install
+fi
+
 npm run dev &
 FRONTEND_PID=$!
 cd ..

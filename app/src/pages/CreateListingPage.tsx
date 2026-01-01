@@ -42,9 +42,16 @@ export function CreateListingPage() {
     try {
       setLoadingNfts(true);
       setError(null);
+      console.log('Loading NFTs for wallet:', publicKey.toString());
+      console.log('Connection endpoint:', connection.rpcEndpoint);
       const ownedNfts = await fetchOwnedNFTs(connection, publicKey);
+      console.log('Loaded NFTs:', ownedNfts.length);
       setNfts(ownedNfts);
+      if (ownedNfts.length === 0) {
+        setError('No NFTs found. Make sure you are connected to devnet and have NFTs in this wallet.');
+      }
     } catch (err: any) {
+      console.error('Error loading NFTs:', err);
       setError(`Failed to load NFTs: ${err.message}`);
     } finally {
       setLoadingNfts(false);
@@ -196,6 +203,21 @@ export function CreateListingPage() {
               <p className="text-muted-foreground mb-4">
                 You don't have any NFTs in this wallet
               </p>
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-4 text-left">
+                <p className="text-sm text-yellow-300 mb-2">
+                  <strong>Connected Wallet:</strong> {publicKey.toString().slice(0, 8)}...{publicKey.toString().slice(-8)}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  If you minted NFTs to a different wallet (CLI wallet), you need to either:
+                </p>
+                <ul className="text-xs text-muted-foreground mt-2 list-disc list-inside space-y-1">
+                  <li>Import your CLI wallet into Phantom/Solflare, or</li>
+                  <li>Mint new NFTs to this connected wallet</li>
+                </ul>
+                <p className="text-xs text-muted-foreground mt-2">
+                  See <code className="text-yellow-300">TROUBLESHOOT_NFTS.md</code> for details.
+                </p>
+              </div>
               <Button variant="outline" onClick={loadNFTs}>
                 Refresh
               </Button>
