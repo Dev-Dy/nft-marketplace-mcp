@@ -1,5 +1,5 @@
 // Anchor client for transaction submission
-import { Program, AnchorProvider, Wallet } from '@coral-xyz/anchor';
+import { Program, AnchorProvider, Wallet, BN } from '@coral-xyz/anchor';
 import { Connection, PublicKey, Transaction, SystemProgram } from '@solana/web3.js';
 import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from '@solana/spl-token';
 import { WalletContextState } from '@solana/wallet-adapter-react';
@@ -118,6 +118,37 @@ export class MarketplaceClient {
       })
       .rpc();
     
+    await this.connection.confirmTransaction(tx, 'confirmed');
+    return tx;
+  }
+
+  async createListing(
+    seller: PublicKey,
+    nftMint: PublicKey,
+    sellerNftAccount: PublicKey,
+    price: number,
+    royaltyBps: number
+  ): Promise<string> {
+    // Derive listing PDA using same seeds as program
+    const [listingPda] = MarketplaceClient.deriveListingPda(nftMint, seller);
+    
+    // Call Anchor instruction - program validates ownership on-chain
+    const tx = await this.program.methods
+      .createListing(
+        new BN(price),
+        royaltyBps
+      )
+      .accounts({
+        seller: seller,
+        nftMint: nftMint,
+        sellerNftAccount: sellerNftAccount,
+        listing: listingPda,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
+      })
+      .rpc();
+    
+    // Wait for confirmation before returning
     await this.connection.confirmTransaction(tx, 'confirmed');
     return tx;
   }

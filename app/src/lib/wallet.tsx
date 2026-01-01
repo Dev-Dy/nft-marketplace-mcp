@@ -13,7 +13,14 @@ import '@solana/wallet-adapter-react-ui/styles.css';
 
 export function WalletContextProvider({ children }: { children: React.ReactNode }) {
   const network = WalletAdapterNetwork.Devnet;
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
+  // Use custom RPC if provided, otherwise fallback to public cluster API
+  const endpoint = useMemo(() => {
+    const customRpc = import.meta.env.VITE_SOLANA_RPC_URL;
+    if (customRpc) {
+      return customRpc;
+    }
+    return clusterApiUrl(network);
+  }, [network]);
 
   const wallets = useMemo(
     () => [

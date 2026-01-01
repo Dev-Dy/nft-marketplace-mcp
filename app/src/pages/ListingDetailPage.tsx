@@ -135,7 +135,10 @@ export function ListingDetailPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-muted-foreground">Loading listing details...</div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+            <div className="text-muted-foreground text-lg">Loading listing details...</div>
+          </div>
         </div>
       </div>
     );
@@ -144,7 +147,7 @@ export function ListingDetailPage() {
   if (error && !listing) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <Card className="border-destructive">
+        <Card className="border-destructive glass">
           <CardHeader>
             <CardTitle>Error</CardTitle>
           </CardHeader>
@@ -162,8 +165,8 @@ export function ListingDetailPage() {
   if (!listing) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <Card>
-          <CardContent className="pt-6">
+        <Card className="glass">
+          <CardContent className="pt-12 pb-12">
             <div className="text-center py-12 text-muted-foreground">
               Listing not found
             </div>
@@ -177,78 +180,83 @@ export function ListingDetailPage() {
   const hasEscrow = escrow !== null && !escrow.settled;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="mb-6">
+    <div className="container mx-auto px-4 py-8 max-w-5xl">
+      <div className="mb-8">
         <Link to="/">
-          <Button variant="ghost" size="sm" className="mb-4">
+          <Button variant="ghost" size="sm" className="mb-6 hover:bg-white/10">
             ← Back to Listings
           </Button>
         </Link>
         <div className="flex items-center justify-between">
-          <h1 className="text-4xl font-bold">Listing Details</h1>
-          <Badge variant={listing.active ? "default" : "secondary"}>
+          <h1 className="text-5xl font-bold gradient-text">Listing Details</h1>
+          <Badge variant={listing.active ? "success" : "secondary"} className="text-sm px-4 py-2">
             {listing.active ? "Active" : "Inactive"}
           </Badge>
         </div>
       </div>
 
       {error && (
-        <Card className="mb-6 border-destructive">
+        <Card className="mb-6 border-destructive/50 glass bg-red-500/10">
           <CardContent className="pt-6">
-            <div className="text-destructive">{error}</div>
+            <div className="text-destructive font-medium">{error}</div>
           </CardContent>
         </Card>
       )}
 
       {txStatus && (
-        <Card className="mb-6 border-primary/50 bg-primary/5">
+        <Card className="mb-6 border-purple-500/50 glass bg-gradient-to-r from-purple-500/10 to-pink-500/10">
           <CardContent className="pt-6">
-            <div className="text-primary font-medium">{txStatus}</div>
+            <div className="flex items-center gap-3">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-500"></div>
+              <div className="text-purple-300 font-medium">{txStatus}</div>
+            </div>
           </CardContent>
         </Card>
       )}
 
-      <div className="grid gap-6 md:grid-cols-2">
-        <Card>
+      <div className="grid gap-6 md:grid-cols-2 mb-6">
+        <Card className="glass hover:shadow-2xl hover:shadow-purple-500/10 transition-all">
           <CardHeader>
             <CardTitle>Listing Information</CardTitle>
             <CardDescription>NFT and seller details</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <div className="text-sm text-muted-foreground mb-1">NFT Mint</div>
-              <div className="font-mono text-sm break-all">{listing.nft_mint}</div>
+            <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+              <div className="text-sm text-muted-foreground mb-2">NFT Mint</div>
+              <div className="font-mono text-sm break-all text-foreground">{listing.nft_mint}</div>
             </div>
-            <div>
-              <div className="text-sm text-muted-foreground mb-1">Seller</div>
-              <div className="font-mono text-sm">
-                {listing.seller.slice(0, 8)}...{listing.seller.slice(-8)}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                <div className="text-xs text-muted-foreground mb-1">Seller</div>
+                <div className="font-mono text-sm">
+                  {listing.seller.slice(0, 6)}...{listing.seller.slice(-6)}
+                </div>
               </div>
-            </div>
-            <div>
-              <div className="text-sm text-muted-foreground mb-1">Creator</div>
-              <div className="font-mono text-sm">
-                {listing.creator.slice(0, 8)}...{listing.creator.slice(-8)}
+              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                <div className="text-xs text-muted-foreground mb-1">Creator</div>
+                <div className="font-mono text-sm">
+                  {listing.creator.slice(0, 6)}...{listing.creator.slice(-6)}
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="glass hover:shadow-2xl hover:shadow-purple-500/10 transition-all">
           <CardHeader>
             <CardTitle>Pricing</CardTitle>
             <CardDescription>Price and royalty breakdown</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div>
-              <div className="text-sm text-muted-foreground mb-1">Price</div>
-              <div className="text-3xl font-bold">
+            <div className="p-6 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+              <div className="text-sm text-muted-foreground mb-2">Price</div>
+              <div className="text-4xl font-bold gradient-text">
                 {(listing.price / 1e9).toFixed(2)} SOL
               </div>
             </div>
-            <div>
+            <div className="p-4 rounded-lg bg-white/5 border border-white/10">
               <div className="text-sm text-muted-foreground mb-1">Royalty</div>
-              <div className="text-xl font-semibold">
+              <div className="text-2xl font-semibold text-purple-300">
                 {(listing.royalty_bps / 100).toFixed(1)}%
               </div>
             </div>
@@ -257,28 +265,28 @@ export function ListingDetailPage() {
       </div>
 
       {simulation && (
-        <Card className="mt-6">
+        <Card className="mb-6 glass border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-pink-500/10">
           <CardHeader>
             <CardTitle>Purchase Breakdown</CardTitle>
             <CardDescription>Estimated costs and payouts</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-3">
-              <div>
-                <div className="text-sm text-muted-foreground mb-1">Total Price</div>
-                <div className="text-2xl font-bold">
+              <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+                <div className="text-sm text-muted-foreground mb-2">Total Price</div>
+                <div className="text-2xl font-bold gradient-text">
                   {(simulation.total_price / 1e9).toFixed(4)} SOL
                 </div>
               </div>
-              <div>
-                <div className="text-sm text-muted-foreground mb-1">Royalty</div>
+              <div className="p-4 rounded-lg bg-white/5 border border-white/10">
+                <div className="text-sm text-muted-foreground mb-2">Royalty</div>
                 <div className="text-2xl font-bold text-muted-foreground">
                   {(simulation.royalty_amount / 1e9).toFixed(4)} SOL
                 </div>
               </div>
-              <div>
-                <div className="text-sm text-muted-foreground mb-1">Seller Payout</div>
-                <div className="text-2xl font-bold text-primary">
+              <div className="p-4 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+                <div className="text-sm text-muted-foreground mb-2">Seller Payout</div>
+                <div className="text-2xl font-bold gradient-text">
                   {(simulation.seller_payout / 1e9).toFixed(4)} SOL
                 </div>
               </div>
@@ -288,48 +296,52 @@ export function ListingDetailPage() {
       )}
 
       {hasEscrow && (
-        <Card className="mt-6 border-primary/20">
+        <Card className="mb-6 glass border-purple-500/30 bg-purple-500/5">
           <CardHeader>
             <CardTitle>Escrow Status</CardTitle>
             <CardDescription>Funded escrow awaiting settlement</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Buyer</span>
-              <span className="font-mono text-sm">
-                {escrow!.buyer.slice(0, 8)}...{escrow!.buyer.slice(-8)}
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Amount</span>
-              <span className="text-lg font-semibold">
-                {(escrow!.amount / 1e9).toFixed(4)} SOL
-              </span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-muted-foreground">Status</span>
-              <Badge variant={escrow!.settled ? "secondary" : "default"}>
-                {escrow!.settled ? "Settled" : "Pending"}
-              </Badge>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                <div className="text-xs text-muted-foreground mb-1">Buyer</div>
+                <div className="font-mono text-sm">
+                  {escrow!.buyer.slice(0, 6)}...{escrow!.buyer.slice(-6)}
+                </div>
+              </div>
+              <div className="p-3 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+                <div className="text-xs text-muted-foreground mb-1">Amount</div>
+                <div className="text-lg font-bold gradient-text">
+                  {(escrow!.amount / 1e9).toFixed(4)} SOL
+                </div>
+              </div>
+              <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                <div className="text-xs text-muted-foreground mb-1">Status</div>
+                <Badge variant={escrow!.settled ? "secondary" : "success"} className="mt-1">
+                  {escrow!.settled ? "Settled" : "Pending"}
+                </Badge>
+              </div>
             </div>
           </CardContent>
         </Card>
       )}
 
-      <Card className="mt-6">
+      <Card className="glass border-purple-500/30">
         <CardHeader>
           <CardTitle>Actions</CardTitle>
           <CardDescription>Available operations for this listing</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-4">
             {!hasEscrow && listing.active && !isSeller && (
               <Button
                 onClick={handleFundEscrow}
                 disabled={!publicKey || !!txStatus}
                 size="lg"
+                variant="gradient"
+                className="font-semibold"
               >
-                Fund Escrow
+                💰 Fund Escrow
               </Button>
             )}
             {hasEscrow && listing.active && (
@@ -337,9 +349,10 @@ export function ListingDetailPage() {
                 onClick={handleSettleTrade}
                 disabled={!publicKey || !!txStatus}
                 size="lg"
-                variant="default"
+                variant="gradient"
+                className="font-semibold"
               >
-                Settle Trade
+                ✅ Settle Trade
               </Button>
             )}
             {isSeller && listing.active && (
@@ -348,13 +361,15 @@ export function ListingDetailPage() {
                 disabled={!publicKey || !!txStatus}
                 size="lg"
                 variant="destructive"
+                className="font-semibold"
               >
-                Cancel Listing
+                🗑️ Cancel Listing
               </Button>
             )}
             {!publicKey && (
-              <div className="text-sm text-muted-foreground">
-                Connect wallet to perform actions
+              <div className="flex items-center gap-2 text-sm text-muted-foreground p-4 rounded-lg bg-white/5 border border-white/10">
+                <span>🔒</span>
+                <span>Connect wallet to perform actions</span>
               </div>
             )}
           </div>

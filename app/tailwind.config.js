@@ -7,40 +7,74 @@ export default {
   theme: {
     extend: {
       colors: {
-        border: "hsl(217.2 32.6% 17.5%)",
-        input: "hsl(217.2 32.6% 17.5%)",
-        ring: "hsl(212.7 26.8% 83.9%)",
-        background: "hsl(222.2 84% 4.9%)",
-        foreground: "hsl(210 40% 98%)",
+        border: "rgba(255, 255, 255, 0.1)",
+        input: "rgba(255, 255, 255, 0.1)",
+        ring: "rgba(139, 92, 246, 0.5)",
+        background: "#0a0a0f",
+        foreground: "#ffffff",
         primary: {
-          DEFAULT: "hsl(210 40% 98%)",
-          foreground: "hsl(222.2 47.4% 11.2%)",
+          DEFAULT: "#8b5cf6",
+          foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "hsl(217.2 32.6% 17.5%)",
-          foreground: "hsl(210 40% 98%)",
+          DEFAULT: "rgba(139, 92, 246, 0.1)",
+          foreground: "#e9d5ff",
         },
         muted: {
-          DEFAULT: "hsl(217.2 32.6% 17.5%)",
-          foreground: "hsl(215 20.2% 65.1%)",
+          DEFAULT: "rgba(255, 255, 255, 0.05)",
+          foreground: "rgba(255, 255, 255, 0.6)",
         },
         accent: {
-          DEFAULT: "hsl(217.2 32.6% 17.5%)",
-          foreground: "hsl(210 40% 98%)",
+          DEFAULT: "rgba(139, 92, 246, 0.2)",
+          foreground: "#e9d5ff",
         },
         destructive: {
-          DEFAULT: "hsl(0 62.8% 30.6%)",
-          foreground: "hsl(210 40% 98%)",
+          DEFAULT: "#ef4444",
+          foreground: "#ffffff",
         },
         card: {
-          DEFAULT: "hsl(222.2 84% 4.9%)",
-          foreground: "hsl(210 40% 98%)",
+          DEFAULT: "rgba(15, 15, 25, 0.8)",
+          foreground: "#ffffff",
         },
       },
       borderRadius: {
-        lg: "0.5rem",
-        md: "calc(0.5rem - 2px)",
-        sm: "calc(0.5rem - 4px)",
+        lg: "1rem",
+        md: "0.75rem",
+        sm: "0.5rem",
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'web3-gradient': 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%)',
+        'web3-gradient-subtle': 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+      },
+      backdropBlur: {
+        xs: '2px',
+      },
+      animation: {
+        'gradient': 'gradient 15s ease infinite',
+        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+      },
+      keyframes: {
+        gradient: {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          },
+        },
+        shimmer: {
+          '0%': {
+            'background-position': '-1000px 0'
+          },
+          '100%': {
+            'background-position': '1000px 0'
+          },
+        },
       },
     },
   },
