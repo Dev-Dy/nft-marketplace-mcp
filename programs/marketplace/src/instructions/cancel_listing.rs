@@ -53,6 +53,12 @@ pub fn handler(ctx: Context<CancelListing>) -> Result<()> {
             .as_ref()
             .ok_or(MarketplaceError::MissingBuyer)?;
 
+        // Validate buyer matches escrow buyer
+        require!(
+            escrow.buyer == buyer.key(),
+            MarketplaceError::MissingBuyer
+        );
+
         let refund_amount = escrow.amount;
 
         // Refund buyer

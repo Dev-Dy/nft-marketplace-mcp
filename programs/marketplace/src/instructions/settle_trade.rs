@@ -2,6 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
 use crate::state::{Listing, Escrow};
+use crate::errors::MarketplaceError;
 
 #[derive(Accounts)]
 pub struct SettleTrade<'info> {
@@ -35,10 +36,19 @@ pub struct SettleTrade<'info> {
     )]
     pub listing: Account<'info, Listing>,
 
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = seller_nft_account.mint == listing.nft_mint,
+        constraint = seller_nft_account.owner == seller.key(),
+        constraint = seller_nft_account.amount == 1
+    )]
     pub seller_nft_account: Account<'info, TokenAccount>,
 
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = buyer_nft_account.mint == listing.nft_mint,
+        constraint = buyer_nft_account.owner == buyer.key()
+    )]
     pub buyer_nft_account: Account<'info, TokenAccount>,
 
     pub token_program: Program<'info, Token>,
@@ -46,9 +56,24 @@ pub struct SettleTrade<'info> {
 }
 
 pub fn handler(ctx: Context<SettleTrade>) -> Result<()> {
+    // Validate escrow amount matches listing price
+    require!(
+        ctx.accounts.escrow.amount == ctx.accounts.listing.price,
+        MarketplaceError::InvalidPrice
+    );
+
     let price = ctx.accounts.escrow.amount;
-    let royalty = price * ctx.accounts.listing.royalty_bps as u64 / 10_000;
-    let seller_amount = price - royalty;
+    
+    // Calculate royalty with overflow protection
+    let royalty = price
+        .checked_mul(ctx.accounts.listing.royalty_bps as u64)
+        .ok_or(MarketplaceError::InvalidRoyalty)?
+        / 10_000;
+    
+    // Calculate seller amount with underflow protection
+    let seller_amount = price
+        .checked_sub(royalty)
+        .ok_or(MarketplaceError::InvalidRoyalty)?;
 
     // Transfer NFT first
     token::transfer(
@@ -62,6 +87,13 @@ pub fn handler(ctx: Context<SettleTrade>) -> Result<()> {
         ),
         1,
     )?;
+
+    // Verify escrow has sufficient balance
+    let escrow_balance = ctx.accounts.escrow.to_account_info().lamports();
+    require!(
+        escrow_balance >= price,
+        MarketplaceError::InvalidPrice
+    );
 
     // Pay creator (manual lamport manipulation for accounts with data)
     if royalty > 0 {
