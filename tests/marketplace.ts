@@ -494,6 +494,7 @@ describe("marketplace", () => {
             await program.methods
                 .settleTrade()
                 .accounts({
+                    buyer: buyer.publicKey,
                     seller: seller.publicKey,
                     creator: seller.publicKey, // creator = seller
                     escrow: escrowPda,
@@ -647,9 +648,14 @@ describe("marketplace", () => {
                 await program.methods
                     .settleTrade()
                     .accounts({
+                        buyer: buyer.publicKey,
+                        seller: seller.publicKey,
+                        creator: seller.publicKey,
+                        escrow: escrowPda,
+                        listing: listingPda,
                         sellerNftAccount: testSellerNftAccount,
                         buyerNftAccount: testBuyerNftAccount
-                    })
+                    } as any)
                     .signers([buyer, seller])
                     .rpc();
                 assert.fail("Should have failed");
