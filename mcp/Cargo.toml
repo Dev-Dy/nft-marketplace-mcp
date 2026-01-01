@@ -5,6 +5,10 @@ edition = "2021"
 
 [workspace]
 
+[lib]
+name = "marketplace_mcp"
+path = "src/lib.rs"
+
 [dependencies]
 # JSON-RPC server (stdio-based)
 serde = { version = "1.0", features = ["derive"] }
