@@ -1,6 +1,19 @@
 # Mint Test NFTs for Devnet
 
-## Quick Mint (Recommended)
+## Quick Mint to Your Wallet (Recommended)
+
+The easiest way is to use the Node.js script to mint directly to your browser wallet:
+
+```bash
+# Get your wallet address from the frontend, then:
+node scripts/mint-nfts-to-wallet.js YOUR_WALLET_ADDRESS 3
+```
+
+This will mint 3 NFTs directly to your specified wallet address.
+
+## Alternative: Mint to CLI Wallet
+
+If you want to mint to your CLI wallet (the one used by `solana` commands):
 
 ```bash
 ./scripts/mint-test-nfts.sh
@@ -10,6 +23,14 @@ This will mint 3 test NFTs by default. To mint a different number:
 
 ```bash
 ./scripts/mint-test-nfts.sh 5  # Mint 5 NFTs
+```
+
+## Mint to Specific Wallet
+
+To mint to a specific wallet address:
+
+```bash
+./scripts/mint-to-wallet.sh YOUR_WALLET_ADDRESS 3
 ```
 
 ## Manual Minting

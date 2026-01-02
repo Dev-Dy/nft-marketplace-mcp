@@ -58,13 +58,8 @@ solana program show Cm3Lzjt4v9xXagssv5f134Q6BnpMVtb9xqovMvPojGc6
    - Set `VITE_SOLANA_RPC_URL` to devnet RPC
    - Update program ID if it changed
 
-2. **Start Services**
+2. **Start Frontend**
    ```bash
-   # MCP Server
-   cd mcp-server-http
-   SOLANA_RPC_URL=https://api.devnet.solana.com cargo run --release
-   
-   # Frontend
    cd app
    npm run dev
    ```
@@ -77,7 +72,7 @@ solana program show Cm3Lzjt4v9xXagssv5f134Q6BnpMVtb9xqovMvPojGc6
 
 ### "Program already deployed"
 - If program ID matches, you can skip deployment
-- Or upgrade: `anchor upgrade target/deploy/nft_marketplace_mcp.so --program-id Cm3Lzjt4v9xXagssv5f134Q6BnpMVtb9xqovMvPojGc6`
+- Or upgrade: `anchor upgrade target/deploy/nft_marketplace.so --program-id Cm3Lzjt4v9xXagssv5f134Q6BnpMVtb9xqovMvPojGc6`
 
 ### "Rate limit reached"
 - Wait a few minutes and try again

@@ -1,6 +1,6 @@
 # Solana NFT Marketplace
 
-A decentralized NFT marketplace built on Solana using Anchor framework, featuring escrow-based trading, royalty enforcement, and a read-only MCP (Model Context Protocol) server for AI interaction.
+A decentralized NFT marketplace built on Solana using Anchor framework, featuring escrow-based trading and royalty enforcement.
 
 ## Architecture
 
@@ -94,26 +94,15 @@ The marketplace consists of two main account types:
 5. Seller must own NFT at listing creation
 6. Buyer must match escrow buyer on cancellation
 
-## MCP Server
+## Data Fetching
 
-The MCP (Model Context Protocol) server provides a **read-only** interface for AI systems to query marketplace state.
+The frontend fetches data directly from on-chain accounts using Anchor's account fetching methods. All marketplace state is read directly from the blockchain via RPC calls.
 
-### Safety Guarantees
-- **Completely off-chain**: No blockchain state modifications
-- **No transaction signing**: Never holds or uses private keys
-- **Read-only access**: Only fetches account data via RPC
-- **Pure computation**: Tools perform calculations without side effects
-
-### Resources
-- `get_listing_state(listing_pda)`: Fetch listing account state
-- `get_escrow_state(escrow_pda)`: Fetch escrow account state
-- `get_listing_summary(nft_mint, seller)`: Derive and fetch listing by seeds
-
-### Tools
-- `simulate_purchase(listing_pda)`: Calculate purchase breakdown
-- `validate_listing(listing_pda)`: Validate PDA derivation and consistency
-
-See `mcp/README.md` for MCP server details.
+### Features
+- Direct account fetching via Anchor program interface
+- No external services required
+- Real-time blockchain data
+- Type-safe account deserialization
 
 ## Development
 

@@ -1,46 +1,47 @@
-# Marketplace Frontend
+# NFT Marketplace Frontend
 
-React + Vite + TypeScript frontend for the Solana NFT Marketplace.
+React + TypeScript frontend for the Solana NFT marketplace.
+
+## Features
+
+- 🎨 Modern, production-ready UI with animations
+- 🔐 Solana wallet integration (Phantom, Solflare, etc.)
+- 📱 Responsive design
+- ⚡ Fast data fetching directly from blockchain
+- 🎯 Type-safe with TypeScript
 
 ## Setup
 
-1. Install dependencies:
 ```bash
-cd app
 npm install
-```
-
-2. Build the Anchor program to generate IDL:
-```bash
-cd ..
-anchor build
-cp target/idl/marketplace.json app/src/idl/marketplace.json
-```
-
-3. Start MCP HTTP bridge (in separate terminal):
-```bash
-cd mcp-server-http
-cargo run
-```
-
-4. Start frontend dev server:
-```bash
-cd app
 npm run dev
 ```
 
 ## Environment Variables
 
-Create `.env` file:
-```
-VITE_MCP_API_URL=http://localhost:8080
-```
+No environment variables required. The app connects directly to Solana RPC endpoints.
 
-## Features
+## Architecture
 
-- Wallet connection (Phantom, Solflare)
-- View listings (from MCP)
-- Fund escrow
-- Settle trade
-- Cancel listing (seller only)
-- Purchase simulation (from MCP)
+- **`src/lib/anchor.ts`**: Anchor client for transaction submission
+- **`src/lib/data.ts`**: Direct account fetching from blockchain
+- **`src/lib/nft.ts`**: NFT discovery utilities
+- **`src/pages/`**: Main application pages
+- **`src/components/`**: Reusable UI components
+
+## Data Fetching
+
+The frontend fetches data directly from on-chain accounts using Anchor's account fetching methods. No external services required.
+
+## Development
+
+```bash
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { WalletContextProvider } from './lib/wallet';
 import { WalletButton } from './components/WalletButton';
 import { ListingsPage } from './pages/ListingsPage';
@@ -19,7 +19,12 @@ function App() {
           <header className="glass-strong border-b border-white/10 sticky top-0 z-50 backdrop-blur-xl">
             <div className="container mx-auto px-4 py-4">
               <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold gradient-text">NFT Marketplace</h1>
+                <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                  <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20">
+                    <span className="text-2xl">🎨</span>
+                  </div>
+                  <h1 className="text-3xl font-bold gradient-text">NFT Marketplace</h1>
+                </Link>
                 <WalletButton />
               </div>
             </div>

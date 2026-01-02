@@ -17,7 +17,7 @@ export interface Escrow {
   bump: number;
 }
 
-// MCP response types
+// Marketplace account types
 export interface ListingState {
   listing_pda: string;
   seller: string;

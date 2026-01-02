@@ -1,103 +1,107 @@
-# 🚀 Starting the NFT Marketplace
+# Quick Start Guide
 
-## Quick Start (After Deployment)
+Get the NFT marketplace up and running quickly.
 
-### Option 1: Automated Startup Script (Recommended)
+## Prerequisites
+
+- Node.js 18+
+- Rust & Cargo
+- Solana CLI
+- Anchor CLI
+- A Solana wallet (Phantom, Solflare, etc.)
+
+## Quick Start (Devnet)
+
+### Option 1: Use the start script
 
 ```bash
 ./scripts/start-devnet.sh
 ```
 
 This will:
-- ✅ Start MCP HTTP bridge
-- ✅ Start frontend dev server
-- ✅ Configure devnet RPC URLs
+- ✅ Start the frontend on http://localhost:5173
+- ✅ Configure Solana CLI for devnet
 
-### Option 2: Manual Startup
+### Option 2: Manual start
 
-#### Step 1: Start MCP HTTP Bridge
-
-```bash
-cd mcp-server-http
-MCP_BINARY=../mcp/target/release/marketplace-mcp \
-SOLANA_RPC_URL=https://api.devnet.solana.com \
-cargo run --release
-```
-
-The MCP server will run on: **http://localhost:8080**
-
-#### Step 2: Start Frontend (New Terminal)
+#### Step 1: Start Frontend
 
 ```bash
 cd app
-
-# Create .env file if it doesn't exist
-cat > .env.local << EOF
-VITE_SOLANA_RPC_URL=https://api.devnet.solana.com
-VITE_MCP_API_URL=http://localhost:8080
-EOF
-
-# Install dependencies (if not done)
 npm install
-
-# Start dev server
 npm run dev
 ```
 
-The frontend will run on: **http://localhost:5173** (or similar)
+The frontend will run on: **http://localhost:5173**
 
-## Service URLs
+## Quick Start (Local Validator)
 
-- **Frontend**: http://localhost:5173
-- **MCP HTTP Bridge**: http://localhost:8080
-- **Solana RPC**: https://api.devnet.solana.com
-- **Program ID**: `Cm3Lzjt4v9xXagssv5f134Q6BnpMVtb9xqovMvPojGc6`
+### Option 1: Use the start script
 
-## Verification
+```bash
+./scripts/start-local.sh
+```
 
-1. **Check Program Deployment**:
-   ```bash
-   solana program show Cm3Lzjt4v9xXagssv5f134Q6BnpMVtb9xqovMvPojGc6
-   ```
+This will:
+- ✅ Start local Solana validator
+- ✅ Start the frontend
+- ✅ Airdrop SOL to default keypair
 
-2. **Test MCP Server**:
-   ```bash
-   curl http://localhost:8080/health
-   ```
+### Option 2: Manual start
 
-3. **Open Frontend**:
-   - Navigate to http://localhost:5173
-   - Connect your wallet (Phantom/Solflare)
-   - You should see the marketplace interface
+#### Step 1: Start Local Validator
+
+```bash
+solana-test-validator --reset
+```
+
+#### Step 2: Configure for Localhost
+
+```bash
+solana config set --url localhost
+solana airdrop 10
+```
+
+#### Step 3: Deploy Program
+
+```bash
+./scripts/deploy.sh
+```
+
+#### Step 4: Start Frontend
+
+```bash
+cd app
+npm install
+npm run dev
+```
+
+## Usage
+
+1. **Connect Wallet**: Click "Connect Wallet" in the top right
+2. **Create Listing**: Navigate to "Create Listing" and select an NFT
+3. **View Listings**: Browse active listings on the home page
+4. **Purchase**: Click on a listing to view details and purchase
 
 ## Troubleshooting
 
-### MCP Server Won't Start
-- Check if port 8080 is available: `lsof -i :8080`
-- Verify MCP binary exists: `ls -la mcp/target/release/marketplace-mcp`
-- Rebuild if needed: `cd mcp && cargo build --release`
+### Frontend won't start
+- Check Node.js version: `node --version` (should be 18+)
+- Reinstall dependencies: `cd app && rm -rf node_modules && npm install`
 
-### Frontend Can't Connect
-- Check `.env.local` file exists in `app/` directory
-- Verify MCP server is running: `curl http://localhost:8080/health`
-- Check browser console for errors
+### Wallet connection issues
+- Make sure your wallet is set to the correct network (devnet/mainnet)
+- Try disconnecting and reconnecting your wallet
 
-### Rate Limits
-- Use free RPC providers (see `RPC_OPTIONS.md`)
-- Or use local validator (see `scripts/start-local.sh`)
+### Transaction failures
+- Check you have enough SOL for transaction fees
+- Verify the program is deployed: `anchor keys list`
+
+### Program not found
+- Deploy the program: `./scripts/deploy.sh`
+- Check program ID matches in `app/src/lib/anchor.ts`
 
 ## Next Steps
 
-1. **Get Test NFTs**: Use devnet NFT minters or create test tokens
-2. **Create Listings**: Connect wallet → Select NFT → Set price → List
-3. **Test Trading**: Fund escrow → Settle trade → Verify NFT transfer
-
-## Stopping Services
-
-Press `Ctrl+C` in each terminal, or:
-
-```bash
-# Find and kill processes
-pkill -f "marketplace-mcp"
-pkill -f "vite"
-```
+- See `DEPLOY.md` for production deployment
+- See `DEVNET_SETUP.md` for detailed devnet configuration

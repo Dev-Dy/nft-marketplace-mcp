@@ -154,7 +154,7 @@ export class MarketplaceClient {
   }
 
   // Helper to derive PDAs
-  static async deriveListingPda(nftMint: PublicKey, seller: PublicKey): Promise<[PublicKey, number]> {
+  static deriveListingPda(nftMint: PublicKey, seller: PublicKey): [PublicKey, number] {
     return PublicKey.findProgramAddressSync(
       [
         Buffer.from('listing'),
@@ -165,7 +165,7 @@ export class MarketplaceClient {
     );
   }
 
-  static async deriveEscrowPda(listingPda: PublicKey): Promise<[PublicKey, number]> {
+  static deriveEscrowPda(listingPda: PublicKey): [PublicKey, number] {
     return PublicKey.findProgramAddressSync(
       [Buffer.from('escrow'), listingPda.toBuffer()],
       PROGRAM_ID

@@ -12,8 +12,8 @@ If you're hitting rate limits on the public Solana RPC, here are free alternativ
 # Frontend (.env file):
 VITE_SOLANA_RPC_URL=https://devnet.helius-rpc.com/?api-key=YOUR_API_KEY
 
-# MCP Server:
-SOLANA_RPC_URL=https://devnet.helius-rpc.com/?api-key=YOUR_API_KEY
+# Frontend (.env.local):
+VITE_SOLANA_RPC_URL=https://devnet.helius-rpc.com/?api-key=YOUR_API_KEY
 ```
 
 ### Option 2: QuickNode (Free Tier)
@@ -24,8 +24,8 @@ SOLANA_RPC_URL=https://devnet.helius-rpc.com/?api-key=YOUR_API_KEY
 # Frontend (.env file):
 VITE_SOLANA_RPC_URL=https://YOUR_ENDPOINT.quicknode.com/YOUR_API_KEY
 
-# MCP Server:
-SOLANA_RPC_URL=https://YOUR_ENDPOINT.quicknode.com/YOUR_API_KEY
+# Frontend (.env.local):
+VITE_SOLANA_RPC_URL=https://YOUR_ENDPOINT.quicknode.com/YOUR_API_KEY
 ```
 
 ### Option 3: Triton (Free Tier)
@@ -36,8 +36,8 @@ SOLANA_RPC_URL=https://YOUR_ENDPOINT.quicknode.com/YOUR_API_KEY
 # Frontend (.env file):
 VITE_SOLANA_RPC_URL=https://devnet.rpcpool.com/YOUR_API_KEY
 
-# MCP Server:
-SOLANA_RPC_URL=https://devnet.rpcpool.com/YOUR_API_KEY
+# Frontend (.env.local):
+VITE_SOLANA_RPC_URL=https://devnet.rpcpool.com/YOUR_API_KEY
 ```
 
 ### Option 4: Local Validator (No Rate Limits)
@@ -48,8 +48,8 @@ solana-test-validator
 # Frontend (.env file):
 VITE_SOLANA_RPC_URL=http://localhost:8899
 
-# MCP Server:
-SOLANA_RPC_URL=http://localhost:8899
+# Frontend (.env.local):
+VITE_SOLANA_RPC_URL=http://localhost:8899
 ```
 
 ## Configuration
@@ -57,12 +57,6 @@ SOLANA_RPC_URL=http://localhost:8899
 ### Frontend (.env file in `app/` directory)
 ```bash
 VITE_SOLANA_RPC_URL=https://api.devnet.solana.com
-VITE_MCP_API_URL=http://localhost:8080
-```
-
-### MCP Server (Environment Variable)
-```bash
-SOLANA_RPC_URL=https://api.devnet.solana.com cargo run --release
 ```
 
 ## Rate Limit Solutions
@@ -96,11 +90,7 @@ solana-test-validator
 # Terminal 2: Deploy program locally
 anchor deploy
 
-# Terminal 3: Start MCP with local RPC
-cd mcp-server-http
-SOLANA_RPC_URL=http://localhost:8899 cargo run --release
-
-# Terminal 4: Start frontend with local RPC
+# Terminal 3: Start frontend with local RPC
 cd app
 echo "VITE_SOLANA_RPC_URL=http://localhost:8899" > .env
 npm run dev

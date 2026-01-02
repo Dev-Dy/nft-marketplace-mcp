@@ -97,30 +97,13 @@ spl-token create-account <TOKEN_MINT>
 spl-token mint <TOKEN_MINT> 1
 ```
 
-## Step 6: Configure MCP Server for Devnet
+## Step 6: Configure Frontend RPC (Optional)
 
-Update the MCP HTTP bridge to use devnet RPC:
+The frontend connects directly to Solana RPC. If you need to use a custom RPC endpoint:
 
 ```bash
-# Stop the current MCP server (Ctrl+C)
-
-# Option A: Use public devnet RPC (may hit rate limits)
-cd mcp-server-http
-MCP_BINARY=../mcp/target/release/marketplace-mcp \
-SOLANA_RPC_URL=https://api.devnet.solana.com \
-cargo run --release
-
-# Option B: Use free RPC provider (recommended - see RPC_OPTIONS.md)
-# Get API key from Helius/QuickNode/Triton, then:
-MCP_BINARY=../mcp/target/release/marketplace-mcp \
-SOLANA_RPC_URL=https://devnet.helius-rpc.com/?api-key=YOUR_KEY \
-cargo run --release
-
-# Option C: Use local validator (no rate limits)
-# First: solana-test-validator (in separate terminal)
-MCP_BINARY=../mcp/target/release/marketplace-mcp \
-SOLANA_RPC_URL=http://localhost:8899 \
-cargo run --release
+cd app
+echo "VITE_SOLANA_RPC_URL=https://api.devnet.solana.com" > .env.local
 ```
 
 **Note**: If you hit rate limits, see `RPC_OPTIONS.md` for free alternatives.
@@ -174,9 +157,10 @@ npm run dev
 - Check NFT is in your wallet's associated token account
 - Verify you're on devnet network
 
-### MCP server errors
-- Verify SOLANA_RPC_URL points to devnet
-- Check MCP server logs for connection issues
+### RPC connection errors
+- Verify RPC endpoint is accessible
+- Check browser console for connection errors
+- Try switching to a different RPC provider (see RPC_OPTIONS.md)
 
 ## Quick Commands Reference
 

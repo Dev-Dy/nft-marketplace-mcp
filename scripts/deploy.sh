@@ -51,6 +51,5 @@ echo "📋 Program Information:"
 solana program show Cm3Lzjt4v9xXagssv5f134Q6BnpMVtb9xqovMvPojGc6
 echo ""
 echo "🌐 Next steps:"
-echo "   1. Update frontend .env with devnet RPC URL"
-echo "   2. Start MCP server: cd mcp-server-http && cargo run --release"
-echo "   3. Start frontend: cd app && npm run dev"
+echo "   1. Update frontend .env with devnet RPC URL (if needed)"
+echo "   2. Start frontend: cd app && npm run dev"

@@ -1,64 +1,60 @@
 #!/bin/bash
-# Start marketplace with local validator (no rate limits)
+# Start local environment: local validator + frontend
 
 set -e
 
-echo "🚀 Starting NFT Marketplace with Local Validator..."
+echo "🚀 Starting NFT Marketplace locally..."
 
-# Check if validator is running
-if ! pgrep -f "solana-test-validator" > /dev/null; then
-    echo "⚠️  Local validator not running"
-    echo "   Starting validator in background..."
-    solana-test-validator > /dev/null 2>&1 &
-    VALIDATOR_PID=$!
-    echo "   Validator started (PID: $VALIDATOR_PID)"
-    sleep 5
-else
-    echo "✅ Local validator already running"
+# Check if solana CLI is installed
+if ! command -v solana &> /dev/null; then
+    echo "❌ Error: solana CLI not found. Please install it first."
+    exit 1
 fi
 
-# Deploy program if needed
-echo "📦 Checking program deployment..."
-if ! solana program show Cm3Lzjt4v9xXagssv5f134Q6BnpMVtb9xqovMvPojGc6 > /dev/null 2>&1; then
-    echo "   Deploying program..."
-    anchor deploy
-else
-    echo "   Program already deployed"
+# Check if anchor is installed
+if ! command -v anchor &> /dev/null; then
+    echo "❌ Error: anchor CLI not found. Please install it first."
+    exit 1
 fi
 
-# Start MCP HTTP bridge
-echo "📡 Starting MCP HTTP bridge (local)..."
-cd mcp-server-http
-MCP_BINARY=../mcp/target/release/marketplace-mcp \
-SOLANA_RPC_URL=http://localhost:8899 \
-cargo run --release &
-MCP_PID=$!
-cd ..
+# Start local validator
+echo "🔗 Starting local Solana validator..."
+solana-test-validator --reset --quiet &
+VALIDATOR_PID=$!
 
-sleep 3
+# Wait for validator to be ready
+echo "⏳ Waiting for validator to be ready..."
+sleep 5
+
+# Set to localhost
+echo "📡 Configuring for localhost..."
+solana config set --url localhost
+
+# Airdrop SOL to default keypair
+echo "💰 Airdropping SOL to default keypair..."
+solana airdrop 10
 
 # Start frontend
-echo "🌐 Starting frontend..."
+echo "🎨 Starting frontend..."
 cd app
-# Create .env for local RPC
-echo "VITE_SOLANA_RPC_URL=http://localhost:8899" > .env.local
-echo "VITE_MCP_API_URL=http://localhost:8080" >> .env.local
 npm run dev &
 FRONTEND_PID=$!
 cd ..
 
-echo ""
-echo "✅ Services started!"
-echo ""
-echo "📋 Service Information:"
-echo "   - Local Validator: http://localhost:8899"
-echo "   - MCP HTTP Bridge: http://localhost:8080 (PID: $MCP_PID)"
-echo "   - Frontend: http://localhost:3000 (PID: $FRONTEND_PID)"
-echo ""
-echo "💰 Get SOL: solana airdrop 2"
-echo ""
-echo "🛑 To stop services:"
-echo "   kill $MCP_PID $FRONTEND_PID"
-echo "   pkill -f solana-test-validator"
+# Wait a moment for servers to start
+sleep 2
 
-wait
+echo ""
+echo "✅ Local development environment started!"
+echo ""
+echo "📋 Services running:"
+echo "   - Local Validator: http://localhost:8899 (PID: $VALIDATOR_PID)"
+echo "   - Frontend: http://localhost:5173 (PID: $FRONTEND_PID)"
+echo ""
+echo "💡 Tips:"
+echo "   - Deploy the program: ./scripts/deploy.sh"
+echo "   - Connect your wallet to localhost in the browser"
+echo "   - Check browser console for any errors"
+echo ""
+echo "🛑 To stop all services:"
+echo "   kill $VALIDATOR_PID $FRONTEND_PID"
